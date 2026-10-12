@@ -103,7 +103,12 @@ export default function PreviewPanel({
     }
   };
 
-  const isFormComplete = name.trim().length > 0 && position.trim().length > 0 && activePhoto;
+  const isOriginalTemplate = 
+    (!activePhoto) &&
+    (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
+    (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
+
+  const isFormComplete = (name.trim().length > 0 && position.trim().length > 0 && activePhoto) || isOriginalTemplate;
 
   return (
     <div className="preview-panel-wrap">
@@ -133,7 +138,7 @@ export default function PreviewPanel({
               type="button" 
               className="btn-outline-sm"
               onClick={onLoadSample}
-              title="Load sample committee member for testing"
+              title="Load original sample template"
             >
               ⚡ Load Sample
             </button>
@@ -159,7 +164,7 @@ export default function PreviewPanel({
             height={TEMPLATE_CONFIG.height}
           />
 
-          {!activePhoto && (
+          {!activePhoto && !isOriginalTemplate && (
             <div className="stage-placeholder-overlay">
               <span className="overlay-badge">Awaiting Student Photograph</span>
             </div>

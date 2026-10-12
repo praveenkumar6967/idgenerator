@@ -115,6 +115,22 @@ export async function renderFalconCard(canvas, data, scale = 1) {
   canvas.height = height;
   const ctx = canvas.getContext('2d');
 
+  // Check if this is the original template sample (no photo, with default placeholder name & position)
+  const isOriginalTemplate = 
+    (!photoElement) &&
+    (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
+    (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
+
+  if (isOriginalTemplate) {
+    try {
+      const origTemplateImg = await loadTemplateImage('/assets/falcon_template_original.jpg');
+      ctx.drawImage(origTemplateImg, 0, 0, width, height);
+      return;
+    } catch (e) {
+      console.error('Failed to load original template image:', e);
+    }
+  }
+
   // 1. Clear background
   ctx.fillStyle = '#080808';
   ctx.fillRect(0, 0, width, height);

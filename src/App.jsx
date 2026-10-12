@@ -123,7 +123,12 @@ export default function App() {
 
   // ADD TO CARD LIST (or UPDATE EXISTING)
   const handleAddToCardList = async () => {
-    if (!name.trim() || !position.trim() || !activePhoto) {
+    const isOriginalTemplate = 
+      (!activePhoto) &&
+      (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
+      (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
+
+    if (!isOriginalTemplate && (!name.trim() || !position.trim() || !activePhoto)) {
       alert('Please provide student photo, name, and committee position before adding to list.');
       return;
     }
@@ -234,30 +239,11 @@ export default function App() {
     setIsClearListModalOpen(false);
   };
 
-  // Load single sample student into active editor with intelligent auto-fitting
+  // Load exact sample matching the user's uploaded Falcon template image
   const handleLoadSample = () => {
-    const s = SAMPLE_STUDENTS[0]; // Saranya K
-    setName(s.name);
-    setPosition(s.position);
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = async () => {
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = img.naturalWidth;
-      tempCanvas.height = img.naturalHeight;
-      const ctx = tempCanvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const imgData = ctx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
-      
-      const stats = analyzeImage(imgData);
-      const autoSettings = calculateAutoEnhancement(stats);
-      const enhCanvas = processImage(img, autoSettings);
-
-      const autoFit = await computeAutoFit(img, { radius: TEMPLATE_CONFIG.photo.radius });
-      handlePhotoUploaded(img, enhCanvas, { zoom: autoFit.zoom, panX: autoFit.panX, panY: autoFit.panY });
-    };
-    img.src = s.photoSrc;
+    setName("TEMPLATE PERSON'S NAME");
+    setPosition("OVERALL EVENT COORDINATOR");
+    handlePhotoRemoved();
   };
 
   // Load 5 sample students directly into batch list with auto-fitting for instant testing
