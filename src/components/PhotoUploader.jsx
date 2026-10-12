@@ -7,6 +7,7 @@ import {
   Sliders, 
   Move, 
   ZoomIn, 
+  ZoomOut,
   X, 
   CheckCircle2, 
   AlertCircle,
@@ -33,7 +34,8 @@ export default function PhotoUploader({
   onPhotoRemoved,
   onEnhancedPhotoChange,
   crop,
-  onCropChange
+  onCropChange,
+  autoCrop
 }) {
   const fileInputRef = useRef(null);
   const [dragActive, setDragActive] = useState(false);
@@ -408,28 +410,56 @@ export default function PhotoUploader({
             <div className="subpanel-header">
               <div className="subpanel-title">
                 <Target size={15} className="text-red" />
-                <span>Circular Framing & Crop (Auto-Fitted)</span>
+                <span>Circular Framing & Crop</span>
               </div>
-              <button 
-                type="button"
-                className="btn-link"
-                onClick={handleResetToAutoFit}
-                title="Restore automatic face crop"
-              >
-                🎯 Reset to Auto-Fit
-              </button>
+              <div className="subpanel-actions-group">
+                <button 
+                  type="button"
+                  className="btn-link"
+                  onClick={handleResetToAutoFit}
+                  title="Restore automatic face crop"
+                >
+                  🎯 Auto-Center
+                </button>
+                <button 
+                  type="button"
+                  className="btn-link"
+                  onClick={() => onCropChange({ zoom: 1.0, panX: 0, panY: 0 })}
+                  title="Reset to center (0, 0)"
+                >
+                  ↺ Reset
+                </button>
+              </div>
             </div>
 
             <div className="sliders-grid">
               <div className="slider-item">
                 <div className="slider-label-row">
                   <span>Zoom / Scale</span>
-                  <span className="slider-val">{(crop.zoom || 1.0).toFixed(2)}x</span>
+                  <div className="zoom-stepper-mini">
+                    <button 
+                      type="button"
+                      className="btn-mini-step"
+                      onClick={() => onCropChange({ ...crop, zoom: Math.max(0.7, Number(((crop.zoom || 1.0) - 0.1).toFixed(2))) })}
+                      title="Zoom Out (-)"
+                    >
+                      <ZoomOut size={12} />
+                    </button>
+                    <span className="slider-val">{(crop.zoom || 1.0).toFixed(2)}x</span>
+                    <button 
+                      type="button"
+                      className="btn-mini-step"
+                      onClick={() => onCropChange({ ...crop, zoom: Math.min(3.0, Number(((crop.zoom || 1.0) + 0.1).toFixed(2))) })}
+                      title="Zoom In (+)"
+                    >
+                      <ZoomIn size={12} />
+                    </button>
+                  </div>
                 </div>
                 <input 
                   type="range"
                   min="0.7"
-                  max="2.5"
+                  max="3.0"
                   step="0.05"
                   value={crop.zoom || 1.0}
                   onChange={(e) => onCropChange({ ...crop, zoom: parseFloat(e.target.value) })}
@@ -444,8 +474,8 @@ export default function PhotoUploader({
                 </div>
                 <input 
                   type="range"
-                  min="-180"
-                  max="180"
+                  min="-220"
+                  max="220"
                   step="2"
                   value={crop.panX || 0}
                   onChange={(e) => onCropChange({ ...crop, panX: parseInt(e.target.value) })}
@@ -460,14 +490,19 @@ export default function PhotoUploader({
                 </div>
                 <input 
                   type="range"
-                  min="-220"
-                  max="220"
+                  min="-260"
+                  max="260"
                   step="2"
                   value={crop.panY || 0}
                   onChange={(e) => onCropChange({ ...crop, panY: parseInt(e.target.value) })}
                   className="falcon-slider"
                 />
               </div>
+            </div>
+
+            <div className="framing-drag-hint">
+              <Move size={12} className="text-red" />
+              <span>Interactive: You can also drag the photo directly inside the circular flame frame in the Live Preview!</span>
             </div>
           </div>
 

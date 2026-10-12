@@ -48,6 +48,7 @@ export default function App() {
   const [enhancedPhoto, setEnhancedPhoto] = useState(null);
   const [activePhoto, setActivePhoto] = useState(null);
   const [crop, setCrop] = useState({ zoom: 1.0, panX: 0, panY: 0 });
+  const [autoCrop, setAutoCrop] = useState({ zoom: 1.0, panX: 0, panY: 0 });
 
   // Batch Card List state
   const [cardList, setCardList] = useState(() => {
@@ -98,6 +99,7 @@ export default function App() {
     setEnhancedPhoto(enhCanvas);
     setActivePhoto(enhCanvas);
     setCrop(defaultCrop);
+    setAutoCrop(defaultCrop);
   };
 
   const handlePhotoRemoved = () => {
@@ -105,6 +107,7 @@ export default function App() {
     setEnhancedPhoto(null);
     setActivePhoto(null);
     setCrop({ zoom: 1.0, panX: 0, panY: 0 });
+    setAutoCrop({ zoom: 1.0, panX: 0, panY: 0 });
   };
 
   const handleEnhancedPhotoChange = (updatedCanvas) => {
@@ -201,7 +204,9 @@ export default function App() {
     setEditingCardId(card.id);
     setName(card.name);
     setPosition(card.position);
-    setCrop(card.crop || { zoom: 1.0, panX: 0, panY: 0 });
+    const cardCrop = card.crop || { zoom: 1.0, panX: 0, panY: 0 };
+    setCrop(cardCrop);
+    setAutoCrop(cardCrop);
 
     const photoSrc = card.enhancedPhotoDataUrl || card.originalPhotoSrc;
     if (photoSrc) {
@@ -323,6 +328,7 @@ export default function App() {
               onEnhancedPhotoChange={handleEnhancedPhotoChange}
               crop={crop}
               onCropChange={setCrop}
+              autoCrop={autoCrop}
             />
 
             <DetailsForm 
@@ -340,6 +346,8 @@ export default function App() {
               position={position}
               activePhoto={activePhoto}
               crop={crop}
+              onCropChange={setCrop}
+              autoCrop={autoCrop}
               onResetRequest={() => setIsResetModalOpen(true)}
               onLoadSample={handleLoadSample}
               onAddToCardList={handleAddToCardList}
