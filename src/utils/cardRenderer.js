@@ -40,9 +40,9 @@ export const TEMPLATE_CONFIG = {
   // Committee Position Area
   position: {
     cx: 347,
-    y: 896,
-    maxWidth: 390,
-    baseFontSize: 24,
+    y: 905, // Perfectly centered vertically between the left and right red dashes (y=902..907)
+    maxWidth: 420,
+    baseFontSize: 23,
     minFontSize: 13,
     fontFamily: '"Bebas Neue", "Oswald", "Barlow Condensed", sans-serif',
     color: '#FFFFFF',
@@ -52,35 +52,29 @@ export const TEMPLATE_CONFIG = {
   // Placeholder wipe zones (guarantees zero ghost text)
   wipeZones: [
     // Name zone
-    { x: 40, y: 770, w: 614, h: 80 },
-    // Designation zone between dashes
-    { x: 138, y: 872, w: 414, h: 38 }
+    { x: 40, y: 768, w: 614, h: 83 },
+    // Designation zone between dashes (Left dash ends at 125, Right dash begins at 567)
+    { x: 126, y: 889, w: 440, h: 36 }
   ]
 };
 
-// Cache for loaded background template
-let cachedTemplateImg = null;
+// Cache for loaded background templates
+const imageCache = new Map();
 
 export async function loadTemplateImage(src = '/assets/falcon_template_clean.png') {
-  if (cachedTemplateImg && cachedTemplateImg.src.includes(src)) {
-    return cachedTemplateImg;
+  if (imageCache.has(src)) {
+    return imageCache.get(src);
   }
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      cachedTemplateImg = img;
+      imageCache.set(src, img);
       resolve(img);
     };
     img.onerror = (err) => {
-      const fallback = new Image();
-      fallback.crossOrigin = 'anonymous';
-      fallback.onload = () => {
-        cachedTemplateImg = fallback;
-        resolve(fallback);
-      };
-      fallback.onerror = () => reject(err);
-      fallback.src = '/assets/falcon_template_original.jpg';
+      console.warn(`Failed to load template image at ${src}:`, err);
+      reject(err);
     };
     img.src = src;
   });
@@ -114,22 +108,6 @@ export async function renderFalconCard(canvas, data, scale = 1) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
-
-  // Check if this is the original template sample (no photo, with default placeholder name & position)
-  const isOriginalTemplate = 
-    (!photoElement) &&
-    (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
-    (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
-
-  if (isOriginalTemplate) {
-    try {
-      const origTemplateImg = await loadTemplateImage('/assets/falcon_template_original.jpg');
-      ctx.drawImage(origTemplateImg, 0, 0, width, height);
-      return;
-    } catch (e) {
-      console.error('Failed to load original template image:', e);
-    }
-  }
 
   // 1. Clear background
   ctx.fillStyle = '#080808';

@@ -105,8 +105,8 @@ export default function PreviewPanel({
 
   const isOriginalTemplate = 
     (!activePhoto) &&
-    (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
-    (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
+    (name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
+    (position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
 
   const isFormComplete = (name.trim().length > 0 && position.trim().length > 0 && activePhoto) || isOriginalTemplate;
 

@@ -125,8 +125,8 @@ export default function App() {
   const handleAddToCardList = async () => {
     const isOriginalTemplate = 
       (!activePhoto) &&
-      (!name || name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
-      (!position || position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
+      (name.trim().toUpperCase() === "TEMPLATE PERSON'S NAME") &&
+      (position.trim().toUpperCase() === "OVERALL EVENT COORDINATOR");
 
     if (!isOriginalTemplate && (!name.trim() || !position.trim() || !activePhoto)) {
       alert('Please provide student photo, name, and committee position before adding to list.');
