@@ -14,14 +14,14 @@ import confetti from 'canvas-confetti';
 
 const SAMPLE_STUDENTS = [
   {
+    name: 'NAVIN PRASATH',
+    position: 'OVERALL EVENT COORDINATOR',
+    photoSrc: '/assets/sample_student.jpg'
+  },
+  {
     name: 'SARANYA K',
     position: 'JOINT TREASURER',
     photoSrc: '/assets/samples/saranya.png'
-  },
-  {
-    name: 'NAVIN PRASATH',
-    position: 'OVERALL EVENT COORDINATOR',
-    photoSrc: '/assets/samples/student_1.jpg'
   },
   {
     name: 'DHARANI DHARAN S',
@@ -86,6 +86,11 @@ export default function App() {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [cardList, name, position, activePhoto]);
+
+  // Automatically load sample form on launch
+  useEffect(() => {
+    handleLoadSample();
+  }, []);
 
   // Photo handlers
   const handlePhotoUploaded = (origImg, enhCanvas, defaultCrop) => {
