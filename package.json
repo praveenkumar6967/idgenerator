@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/road-rage": "^5.3.0",
     "canvas-confetti": "^1.9.4",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.55.0",

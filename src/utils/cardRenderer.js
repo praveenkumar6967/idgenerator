@@ -27,14 +27,14 @@ export const TEMPLATE_CONFIG = {
   // Name Area
   name: {
     cx: 347,
-    y: 820,
+    y: 814,
     maxWidth: 590,
-    baseFontSize: 52,
+    baseFontSize: 54,
     minFontSize: 22,
-    fontFamily: '"Sedgwick Ave Display", "Permanent Marker", "Outfit", sans-serif',
+    fontFamily: 'FalconBrush, "Road Rage", "Permanent Marker", sans-serif',
     color: '#FFFFFF',
     glowColor: 'rgba(239, 35, 35, 0.85)',
-    glowBlur: 9
+    glowBlur: 10
   },
 
   // Committee Position Area
@@ -57,6 +57,45 @@ export const TEMPLATE_CONFIG = {
     { x: 126, y: 889, w: 440, h: 36 }
   ]
 };
+
+// Font preloader promise to ensure zero fallback/italic rendering
+let fontLoadingPromise = null;
+
+export async function ensureFalconFonts() {
+  if (fontLoadingPromise) return fontLoadingPromise;
+
+  fontLoadingPromise = (async () => {
+    // 1. Explicitly load using modern FontFace API
+    if (typeof FontFace !== 'undefined') {
+      try {
+        const fontFace = new FontFace(
+          'FalconBrush',
+          "url('/assets/fonts/falcon-brush.woff') format('woff'), url('/assets/fonts/falcon-brush.ttf') format('truetype')",
+          { style: 'normal', weight: '400' }
+        );
+        const loadedFace = await fontFace.load();
+        document.fonts.add(loadedFace);
+      } catch (err) {
+        console.warn('FontFace API load notice:', err);
+      }
+    }
+
+    // 2. Await document.fonts.ready
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
+    // 3. Force load check for FalconBrush
+    if (document.fonts && document.fonts.load) {
+      try {
+        await document.fonts.load('50px FalconBrush');
+        await document.fonts.load('700 24px "Bebas Neue"');
+      } catch (e) {}
+    }
+  })();
+
+  return fontLoadingPromise;
+}
 
 // Cache for loaded background templates
 const imageCache = new Map();
@@ -90,9 +129,7 @@ export async function loadTemplateImage(src = '/assets/falcon_template_clean.png
 export async function renderFalconCard(canvas, data, scale = 1) {
   if (!canvas) return;
 
-  if (document.fonts && document.fonts.ready) {
-    await document.fonts.ready;
-  }
+  await ensureFalconFonts();
 
   const {
     name = '',
@@ -201,13 +238,13 @@ export async function renderFalconCard(canvas, data, scale = 1) {
     ctx.textBaseline = 'middle';
 
     let fontSize = baseFontSize * scale;
-    ctx.font = `900 ${fontSize}px ${fontFamily}`;
+    ctx.font = `${fontSize}px ${fontFamily}`;
     let measuredWidth = ctx.measureText(displayName).width;
 
     if (measuredWidth > scaledMaxWidth) {
       const shrinkRatio = scaledMaxWidth / measuredWidth;
       fontSize = Math.max(minFontSize * scale, Math.floor(fontSize * shrinkRatio));
-      ctx.font = `900 ${fontSize}px ${fontFamily}`;
+      ctx.font = `${fontSize}px ${fontFamily}`;
     }
 
     // Outer red glow pass

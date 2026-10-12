@@ -1,4 +1,16 @@
 /* ==========================================================================
+   FALCON ORIGINAL BRUSH FONT DECLARATION
+   ========================================================================== */
+@font-face {
+  font-family: 'FalconBrush';
+  src: url('/assets/fonts/falcon-brush.woff') format('woff'),
+       url('/assets/fonts/falcon-brush.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+/* ==========================================================================
    FALCON ID CARD GENERATOR - MASTER DESIGN SYSTEM
    Palette: Rich Dark Onyx (#090a0f, #12141a), Crimson Red (#ef4444, #dc2626),
    Flame Vermilion (#ff3b30), Gold Accent (#f59e0b), Crisp White (#ffffff)

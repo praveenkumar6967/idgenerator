@@ -9,10 +9,24 @@
     <!-- Falcon Icon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ef4444'><polygon points='12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2'/></svg>" />
     
-    <!-- Google Fonts: Brush (Permanent Marker, Sedgwick Ave Display), Condensed (Bebas Neue, Oswald), UI (Outfit, Inter) -->
+    <!-- Preload Falcon Original Brush Font -->
+    <link rel="preload" href="/assets/fonts/falcon-brush.woff" as="font" type="font/woff" crossorigin>
+
+    <style>
+      @font-face {
+        font-family: 'FalconBrush';
+        src: url('/assets/fonts/falcon-brush.woff') format('woff'),
+             url('/assets/fonts/falcon-brush.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: block;
+      }
+    </style>
+
+    <!-- Google Fonts: Brush (Permanent Marker, Road Rage), Condensed (Bebas Neue, Oswald), UI (Outfit, Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Permanent+Marker&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Permanent+Marker&family=Road+Rage&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
