@@ -296,6 +296,12 @@ export default function PreviewPanel({
           {activePhoto && (
             <div 
               className={`photo-drag-overlay ${isDragging ? 'dragging' : ''}`}
+              style={{
+                left: `${(TEMPLATE_CONFIG.photo.cx / TEMPLATE_CONFIG.width) * 100}%`,
+                top: `${(TEMPLATE_CONFIG.photo.cy / TEMPLATE_CONFIG.height) * 100}%`,
+                width: `${((TEMPLATE_CONFIG.photo.radius * 2) / TEMPLATE_CONFIG.width) * 100}%`,
+                height: `${((TEMPLATE_CONFIG.photo.radius * 2) / TEMPLATE_CONFIG.height) * 100}%`
+              }}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}

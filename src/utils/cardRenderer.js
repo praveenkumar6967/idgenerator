@@ -3,8 +3,8 @@
  * 
  * Draws pixel-perfect FALCON student committee identity card on HTML5 Canvas:
  * - Original uploaded template as fixed background
- * - Circular photo frame: cx=347, cy=472, radius=212 (matching original template dimensions)
- * - Crisp red inner border ring with subtle glow
+ * - Circular photo frame: cx=347, cy=500, radius=210 (matching original template dimensions)
+ * - Original red brush-stroke border preserved with zero artificial overlay ring
  * - Clean removal of previous placeholder text
  * - Auto-scaling brush & display typography for Student Name
  * - Auto-scaling condensed tracked typography for Committee Position
@@ -20,8 +20,8 @@ export const TEMPLATE_CONFIG = {
   // Circular Photo Area (measured from template & reference cards)
   photo: {
     cx: 347, // Centered horizontally
-    cy: 472, // Centered vertically in red circular flame frame
-    radius: 212 // Diameter: 424px
+    cy: 500, // Centered vertically in red circular flame frame
+    radius: 210 // Diameter: 420px (matches original circular frame opening)
   },
 
   // Name Area
@@ -210,17 +210,6 @@ export async function renderFalconCard(canvas, data, scale = 1) {
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(photoElement, drawX, drawY, drawW, drawH);
 
-    ctx.restore();
-
-    // Draw crisp inner red circular border ring with ambient glow around photo edge
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(scaledCx, scaledCy, scaledR, 0, Math.PI * 2, true);
-    ctx.strokeStyle = '#ef2a2a';
-    ctx.lineWidth = 3.5 * scale;
-    ctx.shadowColor = 'rgba(239, 42, 42, 0.8)';
-    ctx.shadowBlur = 8 * scale;
-    ctx.stroke();
     ctx.restore();
   }
 

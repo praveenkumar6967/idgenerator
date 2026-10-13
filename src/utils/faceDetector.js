@@ -12,10 +12,10 @@
  * @param {Object} circleConfig - { radius: number }
  * @returns {Promise<Object>} { zoom, panX, panY, method, summary }
  */
-export async function computeAutoFit(img, circleConfig = { radius: 212 }) {
+export async function computeAutoFit(img, circleConfig = { radius: 210 }) {
   const w = img.naturalWidth || img.width;
   const h = img.naturalHeight || img.height;
-  const radius = circleConfig.radius || 212;
+  const radius = circleConfig.radius || 210;
   const diameter = radius * 2;
 
   // 1. Try Native Browser Shape Detection API (if supported in Chrome/Edge)
